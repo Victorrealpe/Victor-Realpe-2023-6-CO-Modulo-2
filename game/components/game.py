@@ -1,5 +1,7 @@
 import pygame
 from game.components.spaceship import Spaceship
+from game.components.enemies.enemy_manager import EnemyManager
+
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from game.components.enemies.enemy_manager import EnemyManager
 
@@ -10,6 +12,7 @@ class Game:
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
+        self.player = Spaceship()
         self.playing = False
         self.game_speed = 10
         self.x_pos_bg = 0

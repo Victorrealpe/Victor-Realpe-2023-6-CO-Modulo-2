@@ -28,7 +28,6 @@ class Enemy(Sprite):
 
     def update(self, ships):
         self.rect.y += self.speed_y
-
         if self.movement_x == 'left':
             self.rect.x -= self.speed_x
             self.change_movement_x()
