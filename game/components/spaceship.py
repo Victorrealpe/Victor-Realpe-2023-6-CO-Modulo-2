@@ -25,18 +25,13 @@ class Spaceship:
 
       if user_input[pygame.K_LEFT]:
         self.move_left()
-        if user_input[pygame.K_UP]:
-           self.move_up()
-        if user_input[pygame.K_DOWN]:
-          self.move_down()
+        self.move_diag(user_input)
+
       
 
       elif user_input[pygame.K_RIGHT]:
         self.move_right()
-        if user_input[pygame.K_UP]:
-           self.move_up()
-        if user_input[pygame.K_DOWN]:
-          self.move_down()
+        self.move_diag(user_input)
 
 
       elif user_input[pygame.K_UP]:
@@ -54,7 +49,7 @@ class Spaceship:
 
     def move_right(self):
         self.rect.x += self.SPACESHIP_SPEED
-        if self.rect.right >= SCREEN_WIDTH - self.SPACESHIP_WIDTH:
+        if self.rect.right >= SCREEN_WIDTH:
             self.rect.x = 0
 
     def move_up(self):
@@ -64,6 +59,14 @@ class Spaceship:
     def move_down(self):
       if self.rect.y < SCREEN_HEIGHT - self.SPACESHIP_HEIGT:  
         self.rect.y += self.SPACESHIP_SPEED
+
+    def move_diag(self, user_input):
+        
+        if user_input[pygame.K_UP]:
+           self.move_up()
+        elif user_input[pygame.K_DOWN]:
+          self.move_down()
+       
 
 
     def draw(self, screen):
