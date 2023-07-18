@@ -28,4 +28,11 @@ BULLET_ENEMY = pygame.image.load(os.path.join(IMG_DIR, "Bullet/bullet_2.png"))
 ENEMY_1 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/enemy_1.png"))
 ENEMY_2 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/enemy_2.png"))
 
+
+#SOUND
+
+#DISPAROS
+SOUND_BULLET_PLAYER = os.path.join(IMG_DIR, "Sound/DISPAROS_PLAYER.mp3")
+SOUND_BULLET_ENEMY = os.path.join(IMG_DIR, "Sound/DISPAROS_ENEMY.mp3")
+
 FONT_STYLE = 'freesansbold.ttf'

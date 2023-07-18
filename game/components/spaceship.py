@@ -2,8 +2,8 @@ import pygame
 
 from pygame.sprite import Sprite
 
-
-from game.utils.constants import  SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH
+from game.components.bullets.bullet_player import BulletPlayer
+from game.utils.constants import  SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH, SOUND_BULLET_PLAYER
 
 class Spaceship(Sprite):
     # declaramos constantes, estas siempre estaran escritas en mallusculas 
@@ -13,6 +13,7 @@ class Spaceship(Sprite):
     X_POS = (SCREEN_WIDTH // 2) - SPACESHIP_WIDTH
     Y_POS = 500 
     SPACESHIP_SPEED = 10
+    SHOOT_DELAY = 200
 
     def __init__(self):
         self.image = pygame.transform.scale(SPACESHIP,(self.SPACESHIP_WIDTH,self.SPACESHIP_HEINGH))
@@ -21,9 +22,11 @@ class Spaceship(Sprite):
         self.rect.y = self.Y_POS
         self.last_shot_time = 0
         self.type = 'player'
+        
+        self.last_shot_time = 0
 
 
-    def update(self, user_input):
+    def update(self, user_input, bullet_manager):
 
       if user_input[pygame.K_LEFT]:
         self.move_left()
@@ -42,6 +45,13 @@ class Spaceship(Sprite):
 
       elif user_input[pygame.K_DOWN]:
         self.move_down()
+
+
+      if user_input[pygame.K_SPACE]:
+          current_time = pygame.time.get_ticks()
+          if current_time - self.last_shot_time >= self.SHOOT_DELAY:
+              self.shoot(bullet_manager)
+              self.last_shot_time = current_time
 
 
     #movimiento de jugador
@@ -73,6 +83,15 @@ class Spaceship(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+    def shoot(self, bullet_manager):
+        bullet = BulletPlayer(self)
+        bullet_manager.add_bullet(bullet)
+
+        #SONIDO
+        sound_player= pygame.mixer.Sound(SOUND_BULLET_PLAYER)
+        sound_player.set_volume(0.1) #CONTROL DE VOLUMEN
+        pygame.mixer.Sound.play(sound_player)
 
     
        

@@ -13,11 +13,11 @@ class Enemy(Sprite):
 
     Y_POS = 20
     SPEED_X = 5
-    SPEED_Y = 2
+    SPEED_Y = 4
     MOV_X = {0:'left', 1:'right'}
 
-    INITIAL_SHOOTING_TIME = 2000
-    FINAL_SHOOTING_TIME = 4000
+    INITIAL_SHOOTING_TIME = 1000
+    FINAL_SHOOTING_TIME = 2000
 
     def __init__(self):
         self.image = pygame.transform.scale(ENEMY_1, (self.ENEMY_WIDTH, self.ENEMY_HEIGHT))
@@ -30,7 +30,9 @@ class Enemy(Sprite):
         self.move_x_for = random.randint(30, 100)
         self.index = 0
         self.type = 'enemy'
+        self.index_enemy = 0
         self.shooting_time = random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
+        self.resistance = 4
 
     def update(self, ships, bullet_manager):
         self.rect.y += self.speed_y
@@ -62,7 +64,7 @@ class Enemy(Sprite):
 
     def shoot(self, bullet_manager):
         current_time = pygame.time.get_ticks()
-        if self.shooting_time <= current_time:
+        if self.shooting_time <= current_time and self.index_enemy == 0:
             bullet = Bullet(self)
             bullet_manager.add_bullet(bullet)
             self.shooting_time += random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)

@@ -18,10 +18,12 @@ class EnemyManager:
             enemy.draw(screen)
 
     def add_enemy(self):
-        if len(self.enemies) < 1:
-            enemy = Enemy()
-            enemy_2 = Enemy_2()
-            enemies = [enemy,enemy_2]
-            enemigo = enemies[random.randint(0,1)]
+        enemy_type = random.randint(1,2)
+        if len(self.enemies) < 2:
+
+            if enemy_type == 1:
+                enemy = Enemy()
+            else:
+                enemy = Enemy_2()
             
-            self.enemies.append(enemigo)
+            self.enemies.append(enemy)
