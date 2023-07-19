@@ -33,6 +33,7 @@ class Enemy(Sprite):
         self.index_enemy = 0
         self.shooting_time = random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
         self.resistance = 4
+        self.points = 3 #puntos a sumar a score
 
     def update(self, ships, bullet_manager):
         self.rect.y += self.speed_y

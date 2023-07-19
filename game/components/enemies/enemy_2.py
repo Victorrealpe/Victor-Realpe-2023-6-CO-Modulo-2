@@ -26,6 +26,7 @@ class Enemy_2(Enemy):
         self.move_x_for = random.randint(10, 50)
         self.resistance = 0
         self.index_enemy = 1
+        self.points = 1
 
 
     def shoot(self, bullet_manager):

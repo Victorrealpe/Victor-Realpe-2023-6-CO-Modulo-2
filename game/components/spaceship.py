@@ -93,6 +93,12 @@ class Spaceship(Sprite):
         sound_player.set_volume(0.1) #CONTROL DE VOLUMEN
         pygame.mixer.Sound.play(sound_player)
 
+
+    def reset(self):
+        self.rect.x = self.X_POS
+        self.rect.y = self.Y_POS
+       
+
     
        
 

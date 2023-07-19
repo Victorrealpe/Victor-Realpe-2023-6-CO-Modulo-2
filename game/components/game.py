@@ -6,6 +6,7 @@ from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, F
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.bullets.bullet_manager import BulletManager
 from game.components.menu import Menu
+from game.components.count import Count
 
 
 class Game:
@@ -25,8 +26,10 @@ class Game:
         self.bullet_manager = BulletManager()
         self.menu = Menu('Press Any Key To Start...', self.screen)
         self.running = False
-        self.death_count = 0
-        self.score = 0
+        self.count = Count()
+        self.death_count = self.count.death_count
+        self.score = self.count.high_score
+        self.high_score = self.count.high_score
 
     def execute(self):
 
@@ -42,6 +45,7 @@ class Game:
         self.score = 0
         self.enemy_manager.reset()
         self.bullet_manager.reset()
+        self.player.reset()
         #FALTA RESET DE PLAYER------------------------------------------------------------
         #FALTA RESET DE PODERES------------------------------------------------------------
         # Game loop: events - update - draw
@@ -70,7 +74,7 @@ class Game:
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
-        self.show_score()
+        self.count.show_score(self) # aqui instanciar la nueva claseeeee counttttttttttt--------------
         pygame.display.update()
         pygame.display.flip()
 
@@ -90,28 +94,35 @@ class Game:
 
 
 
-
-
-
-
     def show_menu(self):
-        self.menu.reset(self.screen)
+        half_screen_width = SCREEN_WIDTH // 2
+        half_screen_height = SCREEN_HEIGHT //2
 
-        if self.death_count > 0:
-            self.menu.update_message('New Message')
-        
+        score = f'Score: {str(self.score)}'
+        death = f'Death: {str(self.death_count)}' 
+        hScore = f'High Score: {str(self.high_score)}'
+
+        mensajes =[score,death,hScore]
+        list_score = self.count.high_score_list
+        #count_list = len(self.count.high_score_list)
+
+        self.menu.reset_screen_color(self.screen)
+    
+
+        if self.death_count > 0 and self.playing == False:
+            self.menu.update_message(mensajes, self.screen, self, list_score)
+
+        else:
+            self.menu.main_menu(self.screen,self)
+
+        if not self.menu.high_score_list_on:
+            icon = pygame.transform.scale (ICON, (80,120))
+            self.screen.blit(icon, (half_screen_width - 50, half_screen_height -250))
+
+
         self.menu.draw(self.screen)
         self.menu.update(self)
 
 
 
-
-
-
-    def show_score(self):
-        font = pygame.font.Font(FONT_STYLE, 30)
-        text = font.render(f'Score:{self.score}', True, (255, 255, 255))
-        text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
-        self.screen.blit(text, text_rect)
 

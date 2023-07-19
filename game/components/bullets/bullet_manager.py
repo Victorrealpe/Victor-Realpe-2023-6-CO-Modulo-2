@@ -13,7 +13,8 @@ class BulletManager:
 
             if bullet.rect.colliderect(game.player.rect) and bullet.owner == 'enemy':
                 self.enemy_bullets.remove(bullet)
-                game.death_count += 1
+                game.count.add_death(game)
+                game.count.add_high_score(game)
                 game.playing = False
                 pygame.time.delay(1000)
                 break
@@ -29,7 +30,7 @@ class BulletManager:
                             enemy.resistance -= 1
                         elif enemy.resistance == 0:
                             game.enemy_manager.enemies.remove(enemy)
-                            game.score += 1
+                            game.score += enemy.points # SE SUMAN PUNTOS DE ENEMIGO AL SCORE
                     break
 
 
