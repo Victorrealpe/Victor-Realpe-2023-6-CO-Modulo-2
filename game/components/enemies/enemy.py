@@ -34,10 +34,11 @@ class Enemy(Sprite):
         self.shooting_time = random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
         self.resistance = 4
         self.points = 3 #puntos a sumar a score
+        self.control_dis = True
 
-    def update(self, ships, bullet_manager):
+    def update(self, ships, game):
         self.rect.y += self.speed_y
-        self.shoot(bullet_manager)
+        self.shoot(game.bullet_manager)
 
 
         if self.movement_x == 'left':
@@ -50,6 +51,18 @@ class Enemy(Sprite):
 
         if self.rect.y >= SCREEN_HEIGHT :
             ships.remove(self)
+            for heart in game.player.hearts:
+                hearts_list = list(game.player.hearts)
+                last_heart = hearts_list[-1] 
+                if heart == last_heart:
+                    game.player.hearts.remove(heart)
+                    break
+
+        vidas_disponibles = len(game.player.hearts) + 1
+        if vidas_disponibles <= 1:
+                game.death_count.update()
+                game.playing = False
+                pygame.time.delay(200)
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x,self.rect.y))
@@ -69,6 +82,33 @@ class Enemy(Sprite):
             bullet = Bullet(self)
             bullet_manager.add_bullet(bullet)
             self.shooting_time += random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
+
+    def stop_movement(self):
+        self.speed_y = 0
+        self.speed_x = 0
+        self.rect.y = self.rect.y
+        self.rect.x = self.rect.x
+
+    def ready_movement(self):
+        self.speed_y = self.SPEED_Y
+        self.speed_x = self.SPEED_X
+        
+
+
+    def stop_shoot(self):
+        self.control_dis = False
+
+    def ready_shoot(self):
+        self.control_dis = True
+
+
+
+    def decrease_resistance(self,enemy,game):
+        if enemy.resistance > 0:
+            enemy.resistance -= 1
+        elif enemy.resistance == 0:
+            game.enemy_manager.enemies.remove(enemy)
+            game.score.add_points(enemy) # SE SUMAN PUNTOS DE ENEMIGO AL SCORE
 
 
 

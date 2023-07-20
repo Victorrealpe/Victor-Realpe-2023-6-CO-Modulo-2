@@ -1,192 +1,83 @@
+import sys
 import pygame
-from game.utils.constants import FONT_STYLE, SCREEN_HEIGHT, SCREEN_WIDTH, BG_MENU
 from game.components.button import Button
-import pygame, sys
-
-
+from game.utils.constants import FONT_STYLE, SCREEN_HEIGHT, SCREEN_WIDTH, BG_MENU
 
 class Menu:
-    HALF_SCREEN_HEIGHT = SCREEN_HEIGHT // 2 - 70
-    HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2 
-    high_score_list_on = False
+  HALF_SCREEN_HEIGHT = SCREEN_HEIGHT // 2
+  HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2
+  MENU_COLOR = (255, 255, 255)
+  MESSAGE_COLOR = (255, 255, 255)
 
-    def __init__(self, messages, screen):
-        screen.blit(BG_MENU, (0,0))
-        self.screen = screen.blit(BG_MENU, (0,0))
-        self.font = pygame.font.Font(FONT_STYLE, 50)
+  def __init__(self, screen):
+    screen.blit(BG_MENU, (0,0))
+    self.screen = screen.blit(BG_MENU, (0,0))
+    self.font = pygame.font.Font(FONT_STYLE, 30)
+  
+  def update(self, game):
+    pygame.display.update()
+    self.handle_events_on_menu(game)
+
+  
+  def draw(self, game, screen, message, x = HALF_SCREEN_WIDTH, y = HALF_SCREEN_HEIGHT, color = (0, 0, 0)):
+    text = self.font.render(message, True, color)
+    text_rect = text.get_rect()
+    text_rect.center = (x, y)
+    screen.blit(text, text_rect)
+
+    if game.button_menu == True:
+       self.buttons_menu(game,screen)
+    elif game.button_menu == False:
+       self.buttons_muerte(game,screen)
+    elif game.show_leader_board == True:
+       self.buttons_score(game,screen)
+
+
+  def handle_events_on_menu(self, game):
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        game.playing = False
+        game.running = False
+      elif event.type == pygame.KEYDOWN:
+        if game.death_count.count > 0 and event.key == pygame.K_h:
+          game.show_leader_board = True
+        elif game.death_count.count > 0 and event.key == pygame.K_m:
+          game.show_leader_board = False
+        elif game.show_leader_board and event.key == pygame.K_s:
+          game.show_leader_board = False
+          game.run()
+        else:
+          game.show_leader_board = False
+          game.run()
         
-
-        self.text = self.font.render(messages[0], True, (0,0,0))
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT *2)
-
-        self.text1 = self.font.render(messages[1], True, (0,0,0))
-        self.text_rect1 = self.text.get_rect()
-        self.text_rect1.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT *2 + 60)
-
-        self.text2 = self.font.render(messages[2], True, (0,0,0))
-        self.text_rect2 = self.text.get_rect()
-        self.text_rect2.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT *2 + 300)
-
-
-
-        self.menu_back = False 
-
-    def get_font(size): 
-        return pygame.font.Font(FONT_STYLE, size)
-
-    def update(self, game):
-        pygame.display.update()
-        Menu.main_menu(self, self.screen,game)
-
-    def draw (self, screen ):
-        screen.blit(self.text, self.text_rect)
-        screen.blit(self.text1, self.text_rect1)
-        screen.blit(self.text2, self.text_rect2)
-
-    def handle_events_on_menu(self, game):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game.playing = False
-                game.running = False
-            elif event.type == pygame.KEYDOWN:
-                game.run()
-
-
-
-    def reset_screen_color(self, screen):
-        screen.blit(BG_MENU,(0,0))
-
+  def reset(self, screen):
+    screen.blit(BG_MENU, (0,0))
+    self.screen = screen.blit(BG_MENU, (0,0))
     
-    def agg_text(self):
-        
-        pass
+  def update_message(self, message):
+    self.text = self.font.render(message, True, self.MESSAGE_COLOR)
+    self.text_rect = self.text.get_rect()
+    self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+
+  def get_font(size): 
+    return pygame.font.Font(FONT_STYLE, size)
+  
+  def buttons_menu(self,game,screen):
      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def update_message(self, messages, screen, game, list_score):
-
-        
-
-        if self.menu_back == False:
-
-            boton_grande0 = pygame.image.load("game/assets/Play Rect.png")
-            boton_grande = pygame.transform.scale(boton_grande0, (500, 110))
-        
-
-            MENU_MOUSE_POS = pygame.mouse.get_pos()
-
-
-
-            if self.high_score_list_on == False:
-                self.text = self.font.render(messages[0], True, (0,0,0))
-                self.text_rect = self.text.get_rect()
-                self.text_rect.center = (self.HALF_SCREEN_WIDTH - 10, SCREEN_HEIGHT/3 + 30)
-
-                self.text1 = self.font.render(messages[1], True, (0,0,0))
-                self.text_rect1 = self.text.get_rect()
-                self.text_rect1.center = (self.HALF_SCREEN_WIDTH - 10, SCREEN_HEIGHT/3 + 100)
-
-                self.text2 = self.font.render(messages[2], True, (0,0,0))
-                self.text_rect2 = self.text.get_rect()
-                self.text_rect2.center = (self.HALF_SCREEN_WIDTH - 70, SCREEN_HEIGHT/3 + 170)
-
-            elif self.high_score_list_on == True:
-
-                MENU_TEXT = Menu.get_font(100).render("List High Score", True, "#b68f40")
-                MENU_RECT = MENU_TEXT.get_rect(center=(550, 80))
-
-                self.text = self.font.render(str(list_score[0]), True, (0,0,0))
-                self.text_rect = self.text.get_rect()
-                self.text_rect.center = (self.HALF_SCREEN_WIDTH - 10, SCREEN_HEIGHT/3 + 30)
-
-                self.text1 = self.font.render(str(list_score[1]), True, (0,0,0))
-                self.text_rect1 = self.text.get_rect()
-                self.text_rect1.center = (self.HALF_SCREEN_WIDTH - 10, SCREEN_HEIGHT/3 + 100)
-
-                self.text2 = self.font.render(str(list_score[2]), True, (0,0,0))
-                self.text_rect2 = self.text.get_rect()
-                self.text_rect2.center = (self.HALF_SCREEN_WIDTH - 10, SCREEN_HEIGHT/3 + 170)
-
-
-                screen.blit(MENU_TEXT, MENU_RECT)
-
-
-            PLAY_BUTTON = Button(image=boton_grande, pos=(300, 500), 
-                text_input="PLAY AGAIN", font=Menu.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            
-            QUIT_BUTTON = Button(image=pygame.image.load("game/assets/Quit Rect.png"), pos=(850, 500), 
-                text_input="EXIT", font=Menu.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            
-            
-            
-            for button in [PLAY_BUTTON, QUIT_BUTTON]:
-                button.changeColor(MENU_MOUSE_POS)
-                button.update(screen)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        game.run()
-                        self.menu_back = False
-                        self.high_score_list_on = False
-                
-                    if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        self.menu_back = True
-                        self.high_score_list_on = False
-                        Menu.main_menu(self, screen, game)
-                        
-
-
-
-
-
-
-
-
-
-
-    def main_menu(self, screen,game):
-
-        global menu_volver 
-
-        while game.death_count <= 0 or self.menu_back == True:
-            #boton_grande0 = pygame.image.load("game/assets/Menu/Play Rect.png")
-            #boton_grande = pygame.transform.scale(boton_grande0, (300, 100))
-            
-            screen.blit(BG_MENU,(0,0))
-
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
             MENU_TEXT = Menu.get_font(100).render("ATTACK IN SPACE", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(550, 80))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(550, 230), 
+            PLAY_BUTTON = Button(image=pygame.image.load("game/assets/Play Rect.png"), pos=(550, 390), 
                                 text_input="PLAY", font=Menu.get_font(75), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("game/assets/Options Rect.png"), pos=(550, 380), 
-                                text_input="OPTIONS", font=Menu.get_font(75), base_color="#d7fcd4", hovering_color="White")
+
             QUIT_BUTTON = Button(image=pygame.image.load("game/assets/Quit Rect.png"), pos=(550, 530), 
                                 text_input="QUIT", font=Menu.get_font(75), base_color="#d7fcd4", hovering_color="White")
 
             screen.blit(MENU_TEXT, MENU_RECT)
 
-            for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+            for button in [PLAY_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(screen)
             
@@ -197,22 +88,82 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                         game.run()
-                        self.high_score_list_on = False
                         self.menu_back = False 
-                        
-                    if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        self.high_score_list_on = True
-                        #options_screen.update() 
-                        self.menu_back = False
                         
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         game.playing = False
                         game.running = False
-                        self.high_score_list_on = False
                         pygame.quit()
                         sys.exit()
+     
+  def buttons_muerte(self,game,screen):
+     
+    boton_grande0 = pygame.image.load("game/assets/Play Rect.png")
+    boton_grande = pygame.transform.scale(boton_grande0, (200, 50))
 
+    boton_load_2 = pygame.image.load("game/assets/Quit Rect.png")
+    boton_scale_2 = pygame.transform.scale(boton_load_2, (230, 50))
+     
 
+    MENU_MOUSE_POS = pygame.mouse.get_pos()
+    
+
+    PLAY_BUTTON = Button(image=boton_grande, pos=(300, 400), 
+        text_input="PLAY AGAIN", font=Menu.get_font(30), base_color="#d7fcd4", hovering_color="White")
+        
+    QUIT_BUTTON = Button(image=boton_scale_2, pos=(850, 400), 
+        text_input="HIGH SCORES", font=Menu.get_font(30), base_color="#d7fcd4", hovering_color="White")
+        
+    for button in [PLAY_BUTTON, QUIT_BUTTON]:
+        button.changeColor(MENU_MOUSE_POS)
+        button.update(screen)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                game.run()
+                self.menu_back = False
+             
+            if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                game.data_save()#-----------------------------------------------------------------------------
+                game.show_leader_board = True
+                game.button_menu = None
+
+  def buttons_score(self, game, screen):
+        
+        boton_grande0 = pygame.image.load("game/assets/Play Rect.png")
+        boton_grande = pygame.transform.scale(boton_grande0, (200, 50))
+
+        boton_load_2 = pygame.image.load("game/assets/Quit Rect.png")
+        boton_scale_2 = pygame.transform.scale(boton_load_2, (200, 50))
+        
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+        
+
+        PLAY_BUTTON = Button(image=boton_grande, pos=(300, 400), 
+            text_input="PLAY AGAIN", font=Menu.get_font(30), base_color="#d7fcd4", hovering_color="White")
             
+        QUIT_BUTTON = Button(image=boton_scale_2, pos=(850, 400), 
+            text_input="BACK", font=Menu.get_font(30), base_color="#d7fcd4", hovering_color="White")
+            
+        for button in [PLAY_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(screen)
 
-            pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.data_save()#-----------------------------------------------------------------------------
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    game.run()
+                    self.menu_back = False
+                
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    game.show_leader_board = False
+                    game.button_menu = False

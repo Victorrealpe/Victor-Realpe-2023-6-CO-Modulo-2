@@ -1,9 +1,8 @@
 import pygame
-
 from pygame.sprite import Sprite
-
 from game.components.bullets.bullet_player import BulletPlayer
-from game.utils.constants import  SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH, SOUND_BULLET_PLAYER
+from game.components.heart import Heart
+from game.utils.constants import  SCREEN_HEIGHT, SPACESHIP, SCREEN_WIDTH, SOUND_BULLET_PLAYER, DEFAULT_TYPE
 
 class Spaceship(Sprite):
     # declaramos constantes, estas siempre estaran escritas en mallusculas 
@@ -22,7 +21,11 @@ class Spaceship(Sprite):
         self.rect.y = self.Y_POS
         self.last_shot_time = 0
         self.type = 'player'
-        
+        self.power_up_type = DEFAULT_TYPE
+        self.has_power_up = False
+        self.power_time_up = 0
+        self.vidas = 0  #vidas
+        self.hearts = pygame.sprite.Group()
         self.last_shot_time = 0
 
 
@@ -92,6 +95,18 @@ class Spaceship(Sprite):
         sound_player= pygame.mixer.Sound(SOUND_BULLET_PLAYER)
         sound_player.set_volume(0.1) #CONTROL DE VOLUMEN
         pygame.mixer.Sound.play(sound_player)
+
+
+    def set_image(self, size = (SPACESHIP_WIDTH, SPACESHIP_HEINGH), image = SPACESHIP):
+        self.image = image
+        self.image = pygame.transform.scale(self.image, size)
+
+    def add_vida(self):
+        for self.vidas in range(3):
+            x = 40 + self.vidas * 40  # Espacio entre corazones
+            y = 20  # Altura de los corazones
+            heart = Heart(x, y)  
+            self.hearts.add(heart)
 
 
     def reset(self):

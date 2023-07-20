@@ -9,6 +9,7 @@ import random
 
 class BulletPlayer(Bullet, Sprite):
 
+
     def __init__(self, spaceship):
         super().__init__(spaceship)
 
