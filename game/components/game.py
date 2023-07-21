@@ -39,6 +39,7 @@ class Game:
 
     def execute(self):
         self.data_load()  #-----------------------------------------------------------------------------------------------------
+        self.sound_game() 
         self.running = True
         while self.running:
             if not self.playing and not self.show_leader_board:
@@ -193,7 +194,7 @@ class Game:
                 max_vidas = 10
                 if total_vidas < max_vidas:
                     self.player.vidas += 1
-                    x = 40 + self.player.vidas * 40
+                    x =  40 + total_vidas * 40 
                     y = 20
                     heart_mas = Heart(x, y)
                     self.player.hearts.add(heart_mas) 
@@ -262,6 +263,10 @@ class Game:
             informacion_int = [int(elemento) for elemento in informacion.split(',')]
             self.leader_board.highest_scores = informacion_int
 
+    def sound_game(self):
+        sound_game= pygame.mixer.Sound(SOUND_BASE)
+        sound_game.set_volume(0.1) #CONTROL DE VOLUMEN
+        pygame.mixer.Sound.play(sound_game)
 
 
 
