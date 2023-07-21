@@ -71,4 +71,4 @@ class PowerUpManager:
 
 
 
-        self.power_ups.append(power_random)
+        self.power_ups.append(power_ice)

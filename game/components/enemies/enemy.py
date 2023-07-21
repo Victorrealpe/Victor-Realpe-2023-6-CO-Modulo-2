@@ -64,9 +64,14 @@ class Enemy(Sprite):
                 game.playing = False
                 pygame.time.delay(200)
 
+        self.control_shoot(game)
+
+
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x,self.rect.y))
 
+
+    # METODO CAMBIO DE DIRECCION EN X
     def change_movement_x(self):
         self.index += 1 
         if (self.index >= self.move_x_for and self.movement_x == 'right') or (self.rect.x >= SCREEN_WIDTH - self.ENEMY_WIDTH) :
@@ -76,6 +81,8 @@ class Enemy(Sprite):
             self.movement_x = 'right'
             self.index = 0
 
+
+    #METODO DE DISPARO
     def shoot(self, bullet_manager):
         current_time = pygame.time.get_ticks()
         if self.shooting_time <= current_time and self.index_enemy == 0:
@@ -83,6 +90,8 @@ class Enemy(Sprite):
             bullet_manager.add_bullet(bullet)
             self.shooting_time += random.randint(self.INITIAL_SHOOTING_TIME, self.FINAL_SHOOTING_TIME)
 
+
+    #METODO DE CONTROL DE MOVIMIENTO
     def stop_movement(self):
         self.speed_y = 0
         self.speed_x = 0
@@ -94,15 +103,23 @@ class Enemy(Sprite):
         self.speed_x = self.SPEED_X
         
 
-
+    #METODOS PARA EL CONTROL DE LAS BALAS
     def stop_shoot(self):
         self.control_dis = False
+
+    def control_shoot(self,game):
+        bullet = self.shoot(game.bullet_manager)
+        if bullet is not None and self.control_dis == True:
+            game.bullet_manager.add_bullet(bullet)
+
+        if self.control_dis == False:
+            game.bullet_manager.enemy_bullets = []
 
     def ready_shoot(self):
         self.control_dis = True
 
 
-
+    #METODO DE NIVEL DE RESISTENCIA DEL ENEMIGO A LAS BALAS
     def decrease_resistance(self,enemy,game):
         if enemy.resistance > 0:
             enemy.resistance -= 1

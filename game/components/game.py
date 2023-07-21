@@ -229,21 +229,15 @@ class Game:
                     enemy.stop_movement()
                     enemy.stop_shoot()
                 
-                
+                # PODER SE DETIENE CUANDO EL TIEMPO SE ACABA
                 if time_to_show <=0:
                     self.player_has_power_up = False
                     self.player.power_up_type = DEFAULT_TYPE
                     self.player.set_image()
                     for enemy in self.enemy_manager.enemies:
                         enemy.ready_movement()
-
-
-
-                #self.player.has_power_up = False
-            
-            else:
-                for enemy in self.enemy_manager.enemies:
-                    enemy.ready_shoot()
+                        enemy.ready_shoot()
+                    
 
 
 
@@ -254,8 +248,6 @@ class Game:
         # Abrir el archivo en modo escritura y guardar los datos
         with open('datos.txt', 'w') as archivo:
             archivo.write(datos_a_guardar)
-    
-
 
     def data_load(self):
         with open('datos.txt', 'r') as archivo:
