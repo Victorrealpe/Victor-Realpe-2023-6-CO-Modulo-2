@@ -24,7 +24,7 @@ class BulletManager:
                     if bullet in self.player_bullets:  # Verificar si el elemento está en la lista
                         self.player_bullets.remove(bullet)
                     if enemy in game.enemy_manager.enemies:  # Verificar si el enemigo está en la lista
-                        if enemy.resistance > 0:
+                        if enemy.resistance > 0: # SIMPLIFICAR TODA ESTA PARTE EN UN METODO EN ENEMYYYYYYYYYYYYYYYY ----------------------------------------------------------------------------
                             enemy.resistance -= 1
                         elif enemy.resistance == 0:
                             game.enemy_manager.enemies.remove(enemy)

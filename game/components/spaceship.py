@@ -46,7 +46,7 @@ class Spaceship(Sprite):
       elif user_input[pygame.K_DOWN]:
         self.move_down()
 
-
+ #SIPLIFICAR CODIGOOOOOOOOO EN EL SHOOT DE ESTE ---------------------------------------------------------------------
       if user_input[pygame.K_SPACE]:
           current_time = pygame.time.get_ticks()
           if current_time - self.last_shot_time >= self.SHOOT_DELAY:
