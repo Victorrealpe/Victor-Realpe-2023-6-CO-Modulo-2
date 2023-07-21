@@ -74,10 +74,6 @@ SOUND_ICE = os.path.join(IMG_DIR, "Sound/MUSIC_ICE.flac")
 SOUND_BUTTON = os.path.join(IMG_DIR, "Sound/MUSIC_BUTTON.mp3")
 
 
-
-
-
-
 #ANIMACION DE EXPLOCION
 
 EXPLOSION_1 = pygame.image.load(os.path.join(IMG_DIR, "Explosion/1.png"))

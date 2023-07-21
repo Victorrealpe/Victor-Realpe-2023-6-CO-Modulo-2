@@ -60,7 +60,6 @@ class Game:
             self.update()
             self.draw()
 
-
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -98,8 +97,6 @@ class Game:
             self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
             self.y_pos_bg = 0
         self.y_pos_bg += self.game_speed
-
-    
 
     def show_menu(self):
 
@@ -162,32 +159,11 @@ class Game:
 
 
     def draw_power_up_time(self):
+            
+            time_to_show = round((self.player.power_time_up - pygame.time.get_ticks())/1000, 2)
 
-            if self.player.has_power_up:
-                time_to_show = round((self.player.power_time_up - pygame.time.get_ticks())/1000, 2)
+            self.time_power_use(time_to_show)
 
-                if time_to_show >=0:
-                    font = pygame.font.Font(FONT_STYLE, 30)
-                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
-                    text_rect = text.get_rect()
-                    self.screen.blit(text,(540, 60))
-
-                elif self.player.has_power_up and self.player.power_up_type == BOMB_TYPE:
-                    font = pygame.font.Font(FONT_STYLE, 30)
-                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
-                    text_rect = text.get_rect()
-                    self.screen.blit(text,(540, 60))
-
-                elif self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
-                    font = pygame.font.Font(FONT_STYLE, 30)
-                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
-                    text_rect = text.get_rect()
-                    self.screen.blit(text,(540, 60))
-
-                else:
-                    self.player_has_power_up = False
-                    self.player.power_up_type = DEFAULT_TYPE
-                    self.player.set_image()
 
             if self.player.has_power_up and self.player.power_up_type == HEART_TYPE:
                 total_vidas = len(self.player.hearts)
@@ -219,27 +195,47 @@ class Game:
                         self.enemy_manager.reset()
 
 
-
-
             if self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
-                sound_ice = pygame.mixer.Sound(SOUND_ICE)
-                pygame.mixer.Sound.play(sound_ice)
+                self.power_up_manager.uses_powers(self.player.power_up_type, self, time_to_show)
+            
+            #if self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
+               # sound_ice = pygame.mixer.Sound(SOUND_ICE)
+               # pygame.mixer.Sound.play(sound_ice)
 
-                for enemy in self.enemy_manager.enemies:
-                    enemy.stop_movement()
-                    enemy.stop_shoot()
+
+
+
+
+
+                    
+
+    def time_power_use(self, time_to_show):
+            
+            if self.player.has_power_up:
                 
-                # PODER SE DETIENE CUANDO EL TIEMPO SE ACABA
-                if time_to_show <=0:
+
+                if time_to_show >=0:
+                    font = pygame.font.Font(FONT_STYLE, 30)
+                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
+                    text_rect = text.get_rect()
+                    self.screen.blit(text,(540, 80))
+
+                elif self.player.has_power_up and self.player.power_up_type == BOMB_TYPE:
+                    font = pygame.font.Font(FONT_STYLE, 30)
+                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
+                    text_rect = text.get_rect()
+                    self.screen.blit(text,(540, 80))
+
+                elif self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
+                    font = pygame.font.Font(FONT_STYLE, 30)
+                    text = font.render(f'{str(self.player.power_up_type).capitalize()} is enable for {time_to_show} seconds', True, (255,255,255))
+                    text_rect = text.get_rect()
+                    self.screen.blit(text,(540, 80))
+
+                else:
                     self.player_has_power_up = False
                     self.player.power_up_type = DEFAULT_TYPE
                     self.player.set_image()
-                    for enemy in self.enemy_manager.enemies:
-                        enemy.ready_movement()
-                        enemy.ready_shoot()
-                    
-
-
 
     def data_save(self):
         # Convertir la lista de enteros a una cadena con números separados por comas

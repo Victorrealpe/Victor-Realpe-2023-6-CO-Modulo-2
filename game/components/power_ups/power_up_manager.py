@@ -72,3 +72,16 @@ class PowerUpManager:
 
 
         self.power_ups.append(power_ice)
+
+
+    def uses_powers(self, power_up_type, game, time_to_show):
+        print("usa poderes")
+
+        for poder in game.power_up_manager.power_ups:
+                poder.use_power_ice(game, time_to_show)
+                print("entra al if")
+
+
+
+
+            
