@@ -14,7 +14,6 @@ from game.components.heart import Heart
 
 class Game:
 
-    button_menu = True
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -45,6 +44,7 @@ class Game:
             if not self.playing and not self.show_leader_board:
                 self.show_menu()
             elif self.show_leader_board:
+                
                 self.show_higest_scores()
         pygame.display.quit()
         pygame.quit()
@@ -101,6 +101,8 @@ class Game:
     
 
     def show_menu(self):
+
+
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
         
@@ -108,19 +110,27 @@ class Game:
 
         self.menu.reset(self.screen)
 
-        if self.death_count.count == 0:
-            self.screen.blit(icon, (half_screen_width - 50, half_screen_height - 150))
-            self.menu.draw(self,self.screen, 'Press any key to start ...')
-            self.button_menu = True
+        if self.death_count.count == 0 and self.show_leader_board == False:
 
-        else:
+            self.menu.show_button_menu = True
+
+            self.screen.blit(icon, (SCREEN_WIDTH - 180 , half_screen_height))
+            self.screen.blit(icon, (100 , half_screen_height))
+            self.menu.draw(self,self.screen, 'Press any key to start ...')
+            
+
+        elif self.death_count.count > 0:
+            self.menu.show_button_menu = False
+            self.menu.show_buttons_muerte = True
+         
+            
             self.screen.blit(icon, (half_screen_width - 50, 100))
             self.menu.draw(self,self.screen, 'Game over. Press any key to restart', half_screen_width, 250)
             self.menu.draw(self,self.screen, f'Your score: {self.score.count}', half_screen_width, 300)
             self.menu.draw(self,self.screen, f'Highest score: {self.leader_board.get_highest_score()}', half_screen_width, 350)
             self.menu.draw(self,self.screen, f'Total deaths: {self.death_count.count}', half_screen_width, 400)
             self.menu.draw(self,self.screen, f'Press "h" to see the list of highest scores', half_screen_width, 500)
-            self.button_menu = False
+            
 
 
         self.menu.update(self)
@@ -132,6 +142,7 @@ class Game:
         self.player.reset()
 
     def show_higest_scores(self):
+        
         half_screen_width = SCREEN_WIDTH // 2
         height = 100
         position = 1
@@ -243,9 +254,6 @@ class Game:
         with open('datos.txt', 'w') as archivo:
             archivo.write(datos_a_guardar)
     
-
-
-
 
 
     def data_load(self):
