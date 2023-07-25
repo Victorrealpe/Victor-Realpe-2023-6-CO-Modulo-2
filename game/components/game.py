@@ -195,12 +195,20 @@ class Game:
                         self.enemy_manager.reset()
 
 
-            if self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
-                self.power_up_manager.uses_powers(self.player.power_up_type, self, time_to_show)
             
-            #if self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
-               # sound_ice = pygame.mixer.Sound(SOUND_ICE)
-               # pygame.mixer.Sound.play(sound_ice)
+            if self.player.has_power_up and self.player.power_up_type == ICE_TYPE:
+                for enemy in self.enemy_manager.enemies:
+                    enemy.stop_movement()
+                    enemy.stop_shoot()
+                        
+                # PODER SE DETIENE CUANDO EL TIEMPO SE ACABA
+                if time_to_show <=0:
+                    self.player_has_power_up = False
+                    self.player.power_up_type = DEFAULT_TYPE
+                    self.player.set_image()
+                    for enemy in self.enemy_manager.enemies:
+                        enemy.ready_movement()
+                        enemy.ready_shoot()
 
 
 

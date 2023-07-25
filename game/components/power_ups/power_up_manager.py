@@ -71,7 +71,7 @@ class PowerUpManager:
 
 
 
-        self.power_ups.append(power_ice)
+        self.power_ups.append(power_random)
 
 
     def uses_powers(self, power_up_type, game, time_to_show):
